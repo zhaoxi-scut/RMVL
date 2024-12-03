@@ -30,11 +30,20 @@ set(RMVL_MODULES_IMPORTED_CONFIGCMAKE "")
 # --------------------------------------------------------------------
 function(__find_imported_modules target pkg_name)
   set(PKG_MODULE_CONFIGCMAKE ${target})
-  set(PKG_LOCATION_CONFIGCMAKE ${${pkg_name}_LIB})
-  set(PKG_INCLUDE_DIRS_CONFIGCMAKE ${${pkg_name}_INCLUDE_DIR})
-  if(NOT PKG_LOCATION_CONFIGCMAKE OR NOT PKG_INCLUDE_DIRS_CONFIGCMAKE)
+  # get file name excluding path
+  if(${pkg_name}_LIB)
+    get_filename_component(pkg_lib_name ${${pkg_name}_LIB} NAME)
+  else()
     return()
   endif()
+  if(${pkg_name}_DLL)
+    get_filename_component(pkg_dll_name ${${pkg_name}_DLL} NAME)
+  endif()
+  # for Windows
+  set(PKG_WINLIB_CONFIGCMAKE "\$\{RMVL_INSTALL_PATH\}/${RMVL_3P_LIB_INSTALL_PATH}/${pkg_lib_name}")
+  set(PKG_WINDLL_CONFIGCMAKE "\$\{RMVL_INSTALL_PATH\}/${RMVL_BIN_INSTALL_PATH}/${pkg_dll_name}")
+  # for UNIX
+  set(PKG_LOCATION_CONFIGCMAKE "\$\{RMVL_INSTALL_PATH\}/${RMVL_3P_LIB_INSTALL_PATH}/${pkg_lib_name}")
   rmvl_cmake_configure("${template_dir}/RMVLConfig-IMPORTED.cmake.in" MODULE_CONFIGCMAKE @ONLY)
   set(RMVL_MODULES_IMPORTED_CONFIGCMAKE "${RMVL_MODULES_IMPORTED_CONFIGCMAKE}${MODULE_CONFIGCMAKE}\n" PARENT_SCOPE)
 endfunction()
@@ -75,9 +84,9 @@ function(__find_3rd_package_if flag)
   set(RMVL_3RD_PKGS_CONFIGCMAKE "${RMVL_3RD_PKGS_CONFIGCMAKE}endif()\n\n" PARENT_SCOPE)
 endfunction()
 
-__find_3rd_package_if(WITH_OPENCV FOUND OpenCV)
-__find_3rd_package_if(WITH_APRILTAG TARGET apriltag apriltag)
-__find_3rd_package_if(WITH_OPEN62541 TARGET open62541::open62541 open62541)
+# __find_3rd_package_if(WITH_OPENCV FOUND OpenCV)
+# __find_3rd_package_if(WITH_APRILTAG TARGET apriltag apriltag)
+# __find_3rd_package_if(WITH_OPEN62541 TARGET open62541::open62541 open62541)
 
 # --------------------------------------------------------------------------------------------
 #  Part 2/3: Generate RMVLConfig.cmake

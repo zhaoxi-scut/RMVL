@@ -3,10 +3,17 @@
 # ----------------------------------------------------------------------------
 find_package(Threads REQUIRED)
 
-rmvl_add_module(
-  core
-  EXTERNAL ${CMAKE_THREAD_LIBS_INIT} $<$<BOOL:${WITH_OPENCV}>:opencv_core>
-)
+if(WITH_OPENCV)
+  rmvl_add_module(core EXTERNAL ${CMAKE_THREAD_LIBS_INIT} opencv_core)
+  if(WIN32)
+    install(
+      FILES ${OpenCV_DLL_PATHS}
+      DESTINATION ${RMVL_BIN_INSTALL_PATH}
+    )
+  endif()
+else()
+  rmvl_add_module(core EXTERNAL ${CMAKE_THREAD_LIBS_INIT})
+endif()
 
 # ----------------------------------------------------------------------------
 #  Build Python bindings

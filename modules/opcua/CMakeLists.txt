@@ -8,7 +8,10 @@ rmvl_generate_para(opcua)
 rmvl_add_module(
   opcua
   DEPENDS core
-  EXTERNAL open62541::open62541
+)
+rmvl_link_libraries(
+  opcua
+  PRIVATE open62541::open62541
 )
 
 # ----------------------------------------------------------------------------

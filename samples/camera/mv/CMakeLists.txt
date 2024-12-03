@@ -9,11 +9,13 @@ rmvl_add_exe(
   EXTERNAL opencv_highgui opencv_calib3d
 )
 
+find_package(MvSDK REQUIRED)
+
 rmvl_add_exe(
   rmvl_mv_multi
   SOURCES sample_mv_multi.cpp
   DEPENDS mv_camera
-  EXTERNAL opencv_highgui opencv_calib3d
+  EXTERNAL opencv_highgui opencv_calib3d mvsdk
 )
 
 rmvl_add_exe(

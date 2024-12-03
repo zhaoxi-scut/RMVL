@@ -9,11 +9,13 @@ rmvl_add_exe(
   EXTERNAL opencv_highgui opencv_calib3d
 )
 
+find_package(HikSDK REQUIRED)
+
 rmvl_add_exe(
   rmvl_hik_multi
   SOURCES sample_hik_multi.cpp
   DEPENDS hik_camera
-  EXTERNAL opencv_highgui opencv_calib3d
+  EXTERNAL opencv_highgui opencv_calib3d hiksdk
 )
 
 rmvl_add_exe(
